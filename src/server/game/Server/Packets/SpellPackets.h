@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2017 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -823,7 +823,9 @@ namespace WorldPackets
         public:
             SelfRes(WorldPacket&& packet) : ClientPacket(CMSG_SELF_RES, std::move(packet)) { }
 
-            void Read() override { }
+            void Read() override;
+
+            int32 SpellID = 0;
         };
 
         class GetMirrorImageData final : public ClientPacket
@@ -890,6 +892,16 @@ namespace WorldPackets
             WorldPacket const* Write() override;
 
             RuneData Runes;
+        };
+
+        class AddRunePower final : public ServerPacket
+        {
+        public:
+            AddRunePower() : ServerPacket(SMSG_ADD_RUNE_POWER, 4) { }
+
+            WorldPacket const* Write() override;
+
+            uint32 AddedRunesMask = 0;
         };
 
         class MissileTrajectoryCollision final : public ClientPacket

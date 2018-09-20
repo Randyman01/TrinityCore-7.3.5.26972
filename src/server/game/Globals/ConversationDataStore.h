@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2017 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,8 +19,14 @@
 #define ConversationDataStore_h__
 
 #include "Define.h"
+#include "ObjectGuid.h"
 
 #include <vector>
+
+enum ConversationLineFlags
+{
+    CONVERSATION_LINE_FLAG_NOTIFY_STARTED = 0x1 // Client will send CMSG_CONVERSATION_LINE_STARTED when it runs this line
+};
 
 #pragma pack(push, 1)
 struct ConversationActorTemplate
@@ -35,8 +41,9 @@ struct ConversationLineTemplate
     uint32 Id;          // Link to ConversationLine.db2
     uint32 StartTime;   // Time in ms after conversation creation the line is displayed
     uint32 UiCameraID;  // Link to UiCamera.db2
-    uint16 ActorIdx;    // Index from conversation_actors
-    uint16 Unk;
+    uint8 ActorIdx;     // Index from conversation_actors
+    uint8 Flags;
+    uint16 Padding;
 };
 #pragma pack(pop)
 
@@ -47,7 +54,10 @@ struct ConversationTemplate
     uint32 LastLineEndTime; // Time in ms after conversation creation the last line fades out
 
     std::vector<ConversationActorTemplate const*> Actors;
+    std::vector<ObjectGuid::LowType> ActorGuids;
     std::vector<ConversationLineTemplate const*> Lines;
+
+    uint32 ScriptId;
 };
 
 class TC_GAME_API ConversationDataStore

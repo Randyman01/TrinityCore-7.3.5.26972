@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2017 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -372,7 +372,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SpellCastData con
     data << uint8(spellCastData.DestLocSpellCastIndex);
     data << spellCastData.Immunities;
     data << spellCastData.Predict;
-    data.WriteBits(spellCastData.CastFlagsEx, 22);
+    data.WriteBits(spellCastData.CastFlagsEx, 23);
     data.WriteBits(spellCastData.HitTargets.size(), 16);
     data.WriteBits(spellCastData.MissTargets.size(), 16);
     data.WriteBits(spellCastData.MissStatus.size(), 16);
@@ -821,6 +821,11 @@ void WorldPackets::Spells::UnlearnSkill::Read()
     _worldPacket >> SkillLine;
 }
 
+void WorldPackets::Spells::SelfRes::Read()
+{
+    _worldPacket >> SpellID;
+}
+
 void WorldPackets::Spells::GetMirrorImageData::Read()
 {
     _worldPacket >> UnitGUID;
@@ -866,6 +871,13 @@ void WorldPackets::Spells::SpellClick::Read()
 WorldPacket const* WorldPackets::Spells::ResyncRunes::Write()
 {
     _worldPacket << Runes;
+
+    return &_worldPacket;
+}
+
+WorldPacket const* WorldPackets::Spells::AddRunePower::Write()
+{
+    _worldPacket << uint32(AddedRunesMask);
 
     return &_worldPacket;
 }

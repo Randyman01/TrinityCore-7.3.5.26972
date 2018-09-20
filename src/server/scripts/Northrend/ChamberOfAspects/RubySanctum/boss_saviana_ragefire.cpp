@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2017 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -232,7 +232,7 @@ class spell_saviana_conflagration_init : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& targets)
             {
                 targets.remove_if(ConflagrationTargetSelector());
-                uint8 maxSize = uint8(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 6 : 3);
+                uint8 maxSize = uint8(GetCaster()->GetMap()->Is25ManRaid() ? 6 : 3);
                 if (targets.size() > maxSize)
                     Trinity::Containers::RandomResize(targets, maxSize);
             }
